@@ -26,6 +26,10 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
 #define STRLEN 400
 
 float p = 3.1415926;
+String artist;
+String album;
+String title;
+
 void setup(void) {
   Serial.begin(9600);
   Serial2.begin(115200);
@@ -52,8 +56,6 @@ void setup(void) {
 
 void loop() {
   int i =0;
-  int complete = 0;
-  int timer = 0;
   char str[STRLEN] = {'\0'};
   String data = "";
   //Clear out anything from before
@@ -62,7 +64,24 @@ void loop() {
   }
   Serial2.print("AD\r"); //Get metadata
   delay(100); //Let the command be processed switch to a while loop waiting on available in the future
+  data = get_metadata(&i);
+  artist = get_artist(data);
+  album = get_album(data);
+  title = get_title(data);
+
+  tft.fillScreen(ST7735_BLACK);
+
+  draw_title(title.toCharArray(), title.length());
+  draw_artist(artist.toCharArray(), artist.length());
+  draw_album(album.toCharArray(), album.length());
+  delay(3000); //Check for new song every 3 seconds
+}
+
+String get_metadata(int* i){
   /*Get all the metadata*/
+  int complete = 0;
+  int timer = 0;
+  String data;
   while( complete < 7){
     if(Serial2.available()){
       char c = Serial2.read();
@@ -78,10 +97,43 @@ void loop() {
       complete++;
     }
   }
-  tft.fillScreen(ST7735_BLACK);
-  data.toCharArray(str,i);
-  testdrawtext(str,ST7735_WHITE);
-  delay(1000); //Check for new song every second
+  return data;
+}
+
+String get_artist(String metadata){
+    i = metadata.indexOf("Artist=") + 7;
+    if (i != 1){
+      metadata.remove(0,n); //Removes everything up to the artist
+      i = metadata.indexOf('\n'); //Gets end of line after artist
+      metadata.remove(i);
+    } else {
+      metadata = ""; //Don't know what it is
+    }
+    return metadata
+}
+
+String get_title(String metadata){
+    i = metadata.indexOf("Title=") + 6;
+    if (i != 1){
+      metadata.remove(0,n); //Removes everything up to the artist
+      i = metadata.indexOf('\n'); //Gets end of line after artist
+      metadata.remove(i);
+    } else {
+      metadata = ""; //Don't know what it is
+    }
+    return metadata
+}
+
+String get_album(String metadata){
+    i = metadata.indexOf("Album=") + 6;
+    if (i != 1){
+      metadata.remove(0,n); //Removes everything up to the artist
+      i = metadata.indexOf('\n'); //Gets end of line after artist
+      metadata.remove(i);
+    } else {
+      metadata = ""; //Don't know what it is
+    }
+    return metadata
 }
 
 void testdrawtext(char *text, uint16_t color) {
