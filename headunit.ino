@@ -3,6 +3,7 @@
 
 #include <Adafruit_ST7735.h>
 #include <SPI.h>
+#include <SD.h> //This needs to be the Adafruit one if not using arduino v23
 
 
 /*Defines for the 1.8" TFT from adafruit working on a Teensy 3.1 
@@ -10,6 +11,7 @@ with hardware SPI in normal configuration*/
 #define TFT_CS     6
 #define TFT_RST    1  
 #define TFT_DC     12
+#define SD_CS      2 //Make this whatever works
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
 
 
@@ -26,16 +28,13 @@ void setup(void) {
   tft.setRotation(1);
 
   Serial.println("Initialized");
-
-  uint16_t time = millis();
-  tft.fillScreen(ST7735_BLACK);
-  time = millis() - time;
-
-  Serial.println(time, DEC);
+  if(sd_init()){
+    draw_background("background.bmp");
+  } else {
+    tft.fillScreen(ST7735_BLACK);
+  }
   delay(500);
 
-  // large block of text
-  tft.fillScreen(ST7735_BLACK);
   /*Once this is working try what is in the print test*/
   testdrawtext("No song available yet ", ST7735_WHITE);
   delay(1000);
@@ -82,3 +81,18 @@ void testdrawtext(char *text, uint16_t color) {
   tft.setTextWrap(true);
   tft.print(text);
 }
+
+int sd_init(){
+  Serial.print("initializing SD card");
+  if(!SD.begin(SD_CS)){
+    Serial.println("Failed!");
+    return 0;
+  }
+  Serial.println("Done");
+  return 1;
+}
+
+void draw_background(char* file_name){
+  bmpDraw(file_name, 0,0);
+  delay(5000); //Wait 5 seconds for it to render
+  }
