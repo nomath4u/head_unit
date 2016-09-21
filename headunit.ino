@@ -14,6 +14,14 @@ with hardware SPI in normal configuration*/
 #define SD_CS      2 //Make this whatever works
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
 
+//Text size information
+#define BASE_CHAR_HEIGHT 5
+#define SIZE_MULT 1
+#define CHAR_SIZE (BASE_CHAR_HEIGHT * SIZE_MULT)
+#define TITLE_OFFSET 0
+#define ARTIST_OFFSET 1
+#define ALBUM_OFFSET 2
+#define V_BUFF 3
 
 #define STRLEN 400
 
@@ -26,6 +34,7 @@ void setup(void) {
   // Use this initializer if you're using a 1.8" TFT
   tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
   tft.setRotation(1);
+  
 
   Serial.println("Initialized");
   if(sd_init()){
@@ -79,6 +88,33 @@ void testdrawtext(char *text, uint16_t color) {
   tft.setCursor(0, 0);
   tft.setTextColor(color);
   tft.setTextWrap(true);
+  tft.print(text);
+}
+
+void draw_title(char *text, uint16_t color) {
+  tft.setCursor((TITLE_OFFSET * CHAR_SIZE) + V_BUFF, 0);
+  tft.setTextColor(color);
+  tft.setTextWrap(true);
+  tft.setTextSize(SIZE_MULT);
+  tft.print("Title: ");
+  tft.print(text);
+}
+
+void draw_artist(char *text, uint16_t color) {
+  tft.setCursor((ARTIST_OFFSET * CHAR_SIZE) + V_BUFF, 0);
+  tft.setTextColor(color);
+  tft.setTextWrap(true);
+  tft.setTextSize(SIZE_MULT);
+  tft.print("Artist: ");
+  tft.print(text);
+}
+
+void draw_album(char *text, uint16_t color) {
+  tft.setCursor((ALBUM_OFFSET * CHAR_SIZE) + V_BUFF, 0);
+  tft.setTextColor(color);
+  tft.setTextWrap(true);
+  tft.setTextSize(SIZE_MULT);
+  tft.print("Artist: ");
   tft.print(text);
 }
 
