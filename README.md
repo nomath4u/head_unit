@@ -12,11 +12,16 @@ for other things
 
 As I work on this project I will be adding additional thing. For now there is
 only the INO file in order to program the microcontroller that will be used 
-with the unit. Eventually there will be a wiring diagram for prototyping with
+with the unit. As well as a tool to help send commands to the rn-52. Eventually there will be a wiring diagram for prototyping with
 a parts list and then an eagle schematic and parts list so the board can be
 ordered and then put together and reflowed. After that, separate STL files for 
 parts that will need to be 3d printed will be added based on common
 configurations.
+
+## Bugs in V1.0
+CMD enable is wired to GPIO10 instead of 9
+USBD- is not wired at all
+Power input is not exposed
 
 ## Proposed Configurations
 
@@ -45,3 +50,14 @@ defines will have to be made in order to accomodate the different screens
 * You will want an amplifier for this to be in normal volume range. There is a 
 preamplifier on the bluetooth part but without an amplifier you won't be able
 to hear it when at highway speeds.
+
+## Useful setup tips
+Update to version 1.16 first. Many settings don't work as expected without doing that
+Use the added uart_via_arduino code in order to relay commands through an arduino
+to the RN-52. Make sure your arduino is @ 3.3V.
+
+Commands I liked
+S%,86 // Enableds reconnect on power-on, discoverable on startup, and disables system tones
+SN,<name_here> //Name your device.
+SS,0F //Turn up the internal amplifier to the max (may want to use something different depending on your amp
+
