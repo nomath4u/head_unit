@@ -29,7 +29,7 @@ Still yet to be discovered
 ## Proposed Configurations
 
 ## Schematic
-(./schematic.png)
+![schematic](./schematic.png)
 
 ### Minimal
 
