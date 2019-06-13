@@ -23,7 +23,13 @@ CMD enable is wired to GPIO10 instead of 9
 USBD- is not wired at all
 Power input is not exposed
 
+## Bugs in V1.1
+Still yet to be discovered
+
 ## Proposed Configurations
+
+## Schematic
+(./schematic.png)
 
 ### Minimal
 
@@ -49,7 +55,7 @@ defines will have to be made in order to accomodate the different screens
 
 * You will want an amplifier for this to be in normal volume range. There is a 
 preamplifier on the bluetooth part but without an amplifier you won't be able
-to hear it when at highway speeds.
+to hear it when at highway speeds. As of V1.1 There are spaces for 2 LM386s which help. It may be loud enough on its own for you if you use those connections.
 
 ## Useful setup tips
 Update to version 1.16 first. Many settings don't work as expected without doing that
